@@ -95,7 +95,7 @@ public class MatrixMul {
             Scanner scanner = new Scanner(System.in);//reading user input for sequential or parallel execution
             System.out.println("Press 1 to run sequentially, otherwise a positive number to run in parallel:");
             int choice = 999999999;
-            while (choice < 1) {
+            while (choice == 999999999 || choice < 1) {
                 try {
                     if (choice != 999999999) {
                         System.out.println("Must enter an integer greater than 1.  Try Again.");
