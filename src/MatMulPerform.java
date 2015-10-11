@@ -1,9 +1,5 @@
-import java.io.*;
-import java.util.*;
-import java.util.concurrent.*;
-
 /**
- * Created by perabjoth on 10/6/15.
+ * Created by Perabjoth Singh Bajwa Fall 2015 CSCI 4401
  *      ******
  *    **********
  *   *************
@@ -16,6 +12,9 @@ import java.util.concurrent.*;
  *    ***********
  *   *************
  */
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.*;
 
 //reads matrices separated by spaces from file where elements are separated by commas
 public class MatMulPerform {
