@@ -126,11 +126,11 @@ public class MatMulPerform {
                     ExecutorService executor = Executors.newSingleThreadExecutor();
                     if (choice == 1) {
                         numThreads = 1;
-//                        System.out.println("Since choice was 1, tasks will run sequentially.Only 1 processor was allocated");
+                        System.out.println("Since choice was 1, tasks will run sequentially.Only 1 processor was allocated");
                     } else {
                         numThreads = cores;
                         executor = Executors.newFixedThreadPool(cores);
-//                        System.out.println(cores + " processors were allocated");
+                        System.out.println(cores + " processors were allocated");
                     }
 
                     List<Callable<Object>> tasks = new ArrayList<Callable<Object>>();
