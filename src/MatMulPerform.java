@@ -18,7 +18,7 @@ import java.util.concurrent.*;
  */
 
 //reads matrices separated by spaces from file where elements are separated by commas
-public class MatrixMulPerform {
+public class MatMulPerform {
 
     public static void main(String[] args) {
         double matrix1[][];

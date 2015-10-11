@@ -146,7 +146,18 @@ public class MatrixMul {
 
             }
             executor.shutdown();
-
+            System.out.println();
+            System.out.println("Resultant Matrix:");
+            for (int i = 0; i < matrixR.length; i++) {
+                for (int j = 0; j < matrixR[i].length; j++) {
+                    if (j != matrixR[i].length - 1) {
+                        System.out.print(String.valueOf(matrixR[i][j]) + ", ");
+                    } else {
+                        System.out.print(String.valueOf(matrixR[i][j]));
+                    }
+                }
+                System.out.println();
+            }
             //writing result to Output.txt file
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(
                     new FileOutputStream("Output.txt"), "utf-8"))) {

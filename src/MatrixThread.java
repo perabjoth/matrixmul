@@ -32,14 +32,14 @@ public class MatrixThread implements Runnable {
     //Performing calculations in the run method
     public void run() {
         try {
-//            System.out.println(this.toString() + " computing element [" + position[0] + "," + position[1] + "] of result (" + this.row.length + " multiplications).");
+            System.out.println(this.toString() + " computing element [" + position[0] + "," + position[1] + "] of result (" + this.row.length + " multiplications).");
             for (int i = 0; i < this.row.length; i++) {
                 this.sum += (this.row[i] * this.column[i]);
             }
 
-//            System.out.println(this.toString() + " found element[" + position[0] + "," + position[1] + "] to be " + this.sum);
+            System.out.println(this.toString() + " found element[" + position[0] + "," + position[1] + "] to be " + this.sum);
             result[position[0]][position[1]] = this.sum;
-//            System.out.println(this.toString() + " /DONE");
+            System.out.println(this.toString() + " DONE");
         } catch (Exception e) {
             e.printStackTrace();
         }
