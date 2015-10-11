@@ -4,7 +4,20 @@ import java.util.concurrent.*;
 
 /**
  * Created by perabjoth on 10/3/15.
- */
+ * ******
+ * **********
+ * *************
+ * ***************
+ * **   *****  ***
+ * ***************
+ * ****** ******
+ * ***********
+ * *********
+ * ***********
+ * *************
+ **/
+
+//Reads two matrices separated from a file where the elements are separated by commas
 public class MatrixMul {
 
 
@@ -15,7 +28,7 @@ public class MatrixMul {
         BufferedReader br = null;
         Scanner input = new Scanner(System.in);
         System.out.println("Enter location of input file: ");
-        String file = input.next();
+        String file = input.next();//Reading file location
         try {
 
             String sCurrentLine;
@@ -25,7 +38,7 @@ public class MatrixMul {
             int rows1 = 0;
             int columns2 = 0;
             int rows2 = 0;
-            while ((sCurrentLine = br.readLine()) != null && !sCurrentLine.isEmpty()) {
+            while ((sCurrentLine = br.readLine()) != null && !sCurrentLine.isEmpty()) {//getting # of rows in first matrix
                 if (rows1 == 0) {
                     columns1 = sCurrentLine.split(",").length;
                 } else if (columns1 != sCurrentLine.split(",").length) {
@@ -35,7 +48,7 @@ public class MatrixMul {
                 rows1++;
             }
 
-            while ((sCurrentLine = br.readLine()) != null && !sCurrentLine.isEmpty()) {
+            while ((sCurrentLine = br.readLine()) != null && !sCurrentLine.isEmpty()) {//getting # of rows in second matrix
                 if (rows2 == 0) {
                     columns2 = sCurrentLine.split(",").length;
                 } else if (columns2 != sCurrentLine.split(",").length) {
@@ -45,7 +58,7 @@ public class MatrixMul {
                 rows2++;
             }
             int max = 100;
-            if (rows1 >= max || rows2 >= max || columns1 >= max || columns2 >= max) {
+            if (rows1 >= max || rows2 >= max || columns1 >= max || columns2 >= max) {//limited matrix size to 100 for extra points?
                 System.out.println("Matrix too large");
                 return;
             }
@@ -54,15 +67,17 @@ public class MatrixMul {
             matrixR = new double[rows1][columns2];
             br = new BufferedReader(new FileReader(file));
             int counter = 0;
-            while ((sCurrentLine = br.readLine()) != null && !sCurrentLine.isEmpty()) {
+            while ((sCurrentLine = br.readLine()) != null && !sCurrentLine.isEmpty()) {//reading first matrix
                 matrix1[counter] = StringToDoubleArray(sCurrentLine.split(","));
                 counter++;
             }
             counter = 0;
-            while ((sCurrentLine = br.readLine()) != null && !sCurrentLine.isEmpty()) {
+            while ((sCurrentLine = br.readLine()) != null && !sCurrentLine.isEmpty()) {//reading second matrix
                 matrix2[counter] = StringToDoubleArray(sCurrentLine.split(","));
                 counter++;
             }
+
+            //printing out sizes of matrices
             System.out.println("matrix 1 is " + rows1 + "X" + columns1 + ":");
             for (double x[] : matrix1) {
                 System.out.println(Arrays.toString(x));
@@ -77,10 +92,10 @@ public class MatrixMul {
 
             int cores = Runtime.getRuntime().availableProcessors();
             System.out.println(cores + " cores are available");
-            Scanner scanner = new Scanner(System.in);
+            Scanner scanner = new Scanner(System.in);//reading user input for sequential or parallel execution
             System.out.println("Press 1 to run sequentially, otherwise a positive number to run in parallel:");
             int choice = 999999999;
-            while (choice == 999999999 || choice < 1) {
+            while (choice < 1) {
                 try {
                     if (choice != 999999999) {
                         System.out.println("Must enter an integer greater than 1.  Try Again.");
@@ -97,6 +112,7 @@ public class MatrixMul {
 
             ExecutorService executor = Executors.newFixedThreadPool(1);
             int numThreads = 0;
+            //sequential or parallel
             if (choice == 1) {
                 numThreads = 1;
                 System.out.println("Since choice was 1, tasks will run sequentially.Only 1 processor was allocated");
@@ -107,14 +123,14 @@ public class MatrixMul {
             }
             List<Callable<Object>> tasks = new ArrayList<Callable<Object>>();
             int tasksAdded = 0;
+            //performing calculations using threads
             for (int i = 0; i < rows1; i++) {
-
-                tasksAdded++;
 
                 for (int j = 0; j < columns2; j++) {
                     int position[] = {i, j};
                     MatrixThread thread = new MatrixThread(matrix1[i], column(matrix2, j), position, matrixR);
                     tasks.add(Executors.callable(thread));
+                    tasksAdded++;
 
                     if (tasksAdded == numThreads || (((rows1 - 1) == i) && (columns2 - 1) == j)) {
                         tasksAdded = 0;
@@ -131,6 +147,7 @@ public class MatrixMul {
             }
             executor.shutdown();
 
+            //writing result to Output.txt file
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(
                     new FileOutputStream("Output.txt"), "utf-8"))) {
                 for (int i = 0; i < matrixR.length; i++) {
@@ -157,6 +174,7 @@ public class MatrixMul {
 
     }
 
+    //method to return matrix column as array
     public static double[] column(double matrix[][], int x) {
         int elements = matrix.length;
         double array[] = new double[elements];
@@ -166,6 +184,7 @@ public class MatrixMul {
         return array;
     }
 
+    //method to parse strings to doubles
     public static double[] StringToDoubleArray(String array[]) {
         double doubles[] = new double[array.length];
         for (int i = 0; i < array.length; i++) {

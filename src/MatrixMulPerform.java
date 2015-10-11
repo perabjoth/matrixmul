@@ -4,7 +4,20 @@ import java.util.concurrent.*;
 
 /**
  * Created by perabjoth on 10/6/15.
+ *      ******
+ *    **********
+ *   *************
+ *  ***************
+ *  **   *****  ***
+ *  ***************
+ *   ****** ******
+ *    ***********
+ *     *********
+ *    ***********
+ *   *************
  */
+
+//reads matrices separated by spaces from file where elements are separated by commas
 public class MatrixMulPerform {
 
     public static void main(String[] args) {
@@ -14,14 +27,14 @@ public class MatrixMulPerform {
         BufferedReader br = null;
         Scanner input = new Scanner(System.in);
         System.out.println("Enter location of input file: ");
-        String file = input.next();
+        String file = input.next();//reading input location
         BufferedReader br2 = null;
         int cores = Runtime.getRuntime().availableProcessors();
         System.out.println(cores + " cores are available.");
         Scanner scanner = new Scanner(System.in);
         System.out.println("Press 1 to run sequentially, otherwise a positive number to run in parallel:");
         int choice = 999999999;
-        while (choice == 999999999 || choice < 1) {
+        while (choice < 1) {
             try {
                 if (choice != 999999999) {
                     System.out.println("Must enter an integer greater than 1.  Try Again.");
@@ -35,6 +48,7 @@ public class MatrixMulPerform {
             }
         }
         System.out.println();
+        //two buffers needed for file reading
         try {
             br = new BufferedReader(new FileReader(file));
             br2 = new BufferedReader(new FileReader(file));
@@ -53,7 +67,7 @@ public class MatrixMulPerform {
                 int rows1 = 0;
                 int columns2 = 0;
                 int rows2 = 0;
-                while ((sCurrentLine = br.readLine()) != null && !sCurrentLine.isEmpty()) {
+                while ((sCurrentLine = br.readLine()) != null && !sCurrentLine.isEmpty()) {//getting first matrix size
                     if (rows1 == 0) {
                         columns1 = sCurrentLine.split(",").length;
                     } else if (columns1 != sCurrentLine.split(",").length) {
@@ -63,7 +77,7 @@ public class MatrixMulPerform {
                     rows1++;
                 }
                 int n = rows1;
-                while ((sCurrentLine = br.readLine()) != null && !sCurrentLine.isEmpty()) {
+                while ((sCurrentLine = br.readLine()) != null && !sCurrentLine.isEmpty()) {//getting second matrix size
                     if (rows2 == 0) {
                         columns2 = sCurrentLine.split(",").length;
                     } else if (columns2 != sCurrentLine.split(",").length) {
@@ -73,7 +87,7 @@ public class MatrixMulPerform {
                     rows2++;
                 }
                 int max = 100;
-                if (rows1 >= max || rows2 >= max || columns1 >= max || columns2 >= max) {
+                if (rows1 >= max || rows2 >= max || columns1 >= max || columns2 >= max) {//limits size to 100 for extra points?
                     System.out.println("Matrix too large");
                     return;
                 }
@@ -83,12 +97,12 @@ public class MatrixMulPerform {
                 matrix2 = new double[rows2][columns2];
                 matrixR = new double[rows1][columns2];
                 int counter = 0;
-                while ((sCurrentLine = br2.readLine()) != null && !sCurrentLine.isEmpty()) {
+                while ((sCurrentLine = br2.readLine()) != null && !sCurrentLine.isEmpty()) {//reading first matrix
                     matrix1[counter] = StringToDoubleArray(sCurrentLine.split(","));
                     counter++;
                 }
                 counter = 0;
-                while ((sCurrentLine = br2.readLine()) != null && !sCurrentLine.isEmpty()) {
+                while ((sCurrentLine = br2.readLine()) != null && !sCurrentLine.isEmpty()) {//reading second matrix
                     matrix2[counter] = StringToDoubleArray(sCurrentLine.split(","));
                     counter++;
                 }
@@ -107,7 +121,7 @@ public class MatrixMulPerform {
 
                 int reps = 0;
                 long averageTime = 0;
-                while (reps < 100) {
+                while (reps < 100) {//doing hundred repetitions to get average runtime
                     int numThreads = 0;
                     ExecutorService executor = Executors.newSingleThreadExecutor();
                     if (choice == 1) {
@@ -122,7 +136,7 @@ public class MatrixMulPerform {
                     List<Callable<Object>> tasks = new ArrayList<Callable<Object>>();
                     int tasksAdded = 0;
                     long startTime = System.nanoTime();
-
+                    //performing calculations using threads
                     for (int i = 0; i < rows1; i++) {
                         for (int j = 0; j < columns2; j++) {
                             int position[] = {i, j};
@@ -146,11 +160,12 @@ public class MatrixMulPerform {
 
                     long endTime = System.nanoTime();
                     long time = (endTime - startTime);
-                    averageTime += time;
+                    averageTime += time;//used to calculate time to compute for size n
                     reps++;
                 }
-                averageTime = averageTime/100;
+                averageTime = averageTime/100;//calculating average time
 
+                //writing results to Output.txt
                 try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("Output.txt", true)))) {
                     for (int i = 0; i < matrixR.length; i++) {
                         for (int j = 0; j < matrixR[i].length; j++) {
@@ -165,6 +180,7 @@ public class MatrixMulPerform {
                     writer.println();
                 }
 
+                //writing average calculation time for size n to time.csv
                 try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("time.csv", true)))) {
                     writer.print(n + ", " + averageTime);
                     writer.println();
@@ -187,6 +203,8 @@ public class MatrixMulPerform {
 
     }
 
+    //method to return matrix column as array
+    //takes matrix and column number
     public static double[] column(double matrix[][], int x) {
         int elements = matrix.length;
         double array[] = new double[elements];
@@ -196,6 +214,7 @@ public class MatrixMulPerform {
         return array;
     }
 
+    //method to parse strings to doubles
     public static double[] StringToDoubleArray(String array[]) {
         double doubles[] = new double[array.length];
         for (int i = 0; i < array.length; i++) {
